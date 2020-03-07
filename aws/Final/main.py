@@ -1,4 +1,5 @@
 import boto3
+import getbill as gbill
 
 # Document
 s3BucketName = "invoice-storage-unifyed"
@@ -64,7 +65,8 @@ for entity in entities["Entities"]:
     elif entity["Type"] == "TITLE":
         titles.append(entity["Text"])
     elif entity["Type"] == "QUANTITY":
-        quantities.append(entity["Text"])
+        if entity["Score"] > 0.4:
+            quantities.append(entity) #The Whole Entity
     elif entity["Type"] == "OTHER":
         other.append(entity["Text"])
     elif entity["Type"] == "DATE":
@@ -73,8 +75,6 @@ for entity in entities["Entities"]:
         people.append(entity["Text"])
     elif entity["Type"] == "COMMERCIAL_ITEM":
         commercial_items.append(entity["Text"])
-    
-    print(entity)
     
 
 print()
@@ -90,3 +90,9 @@ print()
 
 print("Items: \n{}".format("\n".join(commercial_items)))
 print("\n".join(other_orgs))
+
+print()
+
+#TODO: Use Amazon Textract to specifically get the BILL AMOUNT, using Key:Value pair thing like I was trying earlier
+bill = gbill.main('sample.jpg')
+print("Bill Amount: {}".format(bill))
