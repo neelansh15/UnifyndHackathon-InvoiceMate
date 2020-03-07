@@ -152,7 +152,7 @@ def main(imgname):
             print(item)
 
     with open('output.json', 'w') as f:
-        f.write(json.dumps(finalBlocksArr))
+        f.write(json.dumps(finalBlocksArr).replace("[", "{").replace("}", "}"))
         f.close()
 
 if __name__ == "__main__":

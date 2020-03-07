@@ -141,7 +141,7 @@ def main():
     finalBlocksArr = []
 
     bucket = 'invoice-storage-unifyed'
-    document = '8.jpg'
+    document = 'FunCity (4).jpg'
     block_count=process_text_analysis(bucket,document)
     print("Blocks detected: " + str(block_count))
     print()

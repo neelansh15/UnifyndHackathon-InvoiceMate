@@ -13,7 +13,7 @@ import aws_train as awst
 #Run AWS to generate output.json for use in training here
 #TODO: Automate this to run for all files. Run for one file, generate output.json, train the model, then
 #do the same for the next file and so on
-awst.main('8.jpg')
+awst.main('Croma (3).jpg')
 
 stemmer = LancasterStemmer()
 
@@ -23,18 +23,16 @@ stemmer = LancasterStemmer()
 
 # Some classes of training data
 training_data = []
-training_data.append({"class":"amount", "text":"amount"})
-training_data.append({"class":"amount", "text":"total"})
-training_data.append({"class":"amount", "text":"net"})
-
-
-print ("%s sentences in training data" % len(training_data))
+training_data.append({"class":"amount", "sentence":"amount"})
+training_data.append({"class":"amount", "sentence":"total"})
+training_data.append({"class":"amount", "sentence":"net"})
+training_data.append({"class":"amount", "sentence":"cards"})
 
 
 words = []
 classes = []
 documents = []
-ignore_words = ['?']
+ignore_words = ['?', ':', ';']
 # loop through each sentence in our training data
 for pattern in training_data:
     # tokenize each word in the sentence
@@ -140,94 +138,94 @@ def think(sentence, show_details=False):
 #Commented as the training model has been generated
 ####
 
-def train(X, y, hidden_neurons=10, alpha=1, epochs=50000, dropout=False, dropout_percent=0.5):
+# def train(X, y, hidden_neurons=10, alpha=1, epochs=50000, dropout=False, dropout_percent=0.5):
 
-    print ("Training with %s neurons, alpha:%s, dropout:%s %s" % (hidden_neurons, str(alpha), dropout, dropout_percent if dropout else '') )
-    print ("Input matrix: %sx%s    Output matrix: %sx%s" % (len(X),len(X[0]),1, len(classes)) )
-    np.random.seed(1)
+#     print ("Training with %s neurons, alpha:%s, dropout:%s %s" % (hidden_neurons, str(alpha), dropout, dropout_percent if dropout else '') )
+#     print ("Input matrix: %sx%s    Output matrix: %sx%s" % (len(X),len(X[0]),1, len(classes)) )
+#     np.random.seed(1)
 
-    last_mean_error = 1
-    # randomly initialize our weights with mean 0
-    synapse_0 = 2*np.random.random((len(X[0]), hidden_neurons)) - 1
-    synapse_1 = 2*np.random.random((hidden_neurons, len(classes))) - 1
+#     last_mean_error = 1
+#     # randomly initialize our weights with mean 0
+#     synapse_0 = 2*np.random.random((len(X[0]), hidden_neurons)) - 1
+#     synapse_1 = 2*np.random.random((hidden_neurons, len(classes))) - 1
 
-    prev_synapse_0_weight_update = np.zeros_like(synapse_0)
-    prev_synapse_1_weight_update = np.zeros_like(synapse_1)
+#     prev_synapse_0_weight_update = np.zeros_like(synapse_0)
+#     prev_synapse_1_weight_update = np.zeros_like(synapse_1)
 
-    synapse_0_direction_count = np.zeros_like(synapse_0)
-    synapse_1_direction_count = np.zeros_like(synapse_1)
+#     synapse_0_direction_count = np.zeros_like(synapse_0)
+#     synapse_1_direction_count = np.zeros_like(synapse_1)
         
-    for j in iter(range(epochs+1)):
+#     for j in iter(range(epochs+1)):
 
-        # Feed forward through layers 0, 1, and 2
-        layer_0 = X
-        layer_1 = sigmoid(np.dot(layer_0, synapse_0))
+#         # Feed forward through layers 0, 1, and 2
+#         layer_0 = X
+#         layer_1 = sigmoid(np.dot(layer_0, synapse_0))
                 
-        if(dropout):
-            layer_1 *= np.random.binomial([np.ones((len(X),hidden_neurons))],1-dropout_percent)[0] * (1.0/(1-dropout_percent))
+#         if(dropout):
+#             layer_1 *= np.random.binomial([np.ones((len(X),hidden_neurons))],1-dropout_percent)[0] * (1.0/(1-dropout_percent))
 
-        layer_2 = sigmoid(np.dot(layer_1, synapse_1))
+#         layer_2 = sigmoid(np.dot(layer_1, synapse_1))
 
-        # how much did we miss the target value?
-        layer_2_error = y - layer_2
+#         # how much did we miss the target value?
+#         layer_2_error = y - layer_2
 
-        if (j% 10000) == 0 and j > 5000:
-            # if this 10k iteration's error is greater than the last iteration, break out
-            if np.mean(np.abs(layer_2_error)) < last_mean_error:
-                print ("delta after "+str(j)+" iterations:" + str(np.mean(np.abs(layer_2_error))) )
-                last_mean_error = np.mean(np.abs(layer_2_error))
-            else:
-                print ("break:", np.mean(np.abs(layer_2_error)), ">", last_mean_error )
-                break
+#         if (j% 10000) == 0 and j > 5000:
+#             # if this 10k iteration's error is greater than the last iteration, break out
+#             if np.mean(np.abs(layer_2_error)) < last_mean_error:
+#                 print ("delta after "+str(j)+" iterations:" + str(np.mean(np.abs(layer_2_error))) )
+#                 last_mean_error = np.mean(np.abs(layer_2_error))
+#             else:
+#                 print ("break:", np.mean(np.abs(layer_2_error)), ">", last_mean_error )
+#                 break
                 
-        # in what direction is the target value?
-        # were we really sure? if so, don't change too much.
-        layer_2_delta = layer_2_error * sigmoid_output_to_derivative(layer_2)
+#         # in what direction is the target value?
+#         # were we really sure? if so, don't change too much.
+#         layer_2_delta = layer_2_error * sigmoid_output_to_derivative(layer_2)
 
-        # how much did each l1 value contribute to the l2 error (according to the weights)?
-        layer_1_error = layer_2_delta.dot(synapse_1.T)
+#         # how much did each l1 value contribute to the l2 error (according to the weights)?
+#         layer_1_error = layer_2_delta.dot(synapse_1.T)
 
-        # in what direction is the target l1?
-        # were we really sure? if so, don't change too much.
-        layer_1_delta = layer_1_error * sigmoid_output_to_derivative(layer_1)
+#         # in what direction is the target l1?
+#         # were we really sure? if so, don't change too much.
+#         layer_1_delta = layer_1_error * sigmoid_output_to_derivative(layer_1)
         
-        synapse_1_weight_update = (layer_1.T.dot(layer_2_delta))
-        synapse_0_weight_update = (layer_0.T.dot(layer_1_delta))
+#         synapse_1_weight_update = (layer_1.T.dot(layer_2_delta))
+#         synapse_0_weight_update = (layer_0.T.dot(layer_1_delta))
         
-        if(j > 0):
-            synapse_0_direction_count += np.abs(((synapse_0_weight_update > 0)+0) - ((prev_synapse_0_weight_update > 0) + 0))
-            synapse_1_direction_count += np.abs(((synapse_1_weight_update > 0)+0) - ((prev_synapse_1_weight_update > 0) + 0))        
+#         if(j > 0):
+#             synapse_0_direction_count += np.abs(((synapse_0_weight_update > 0)+0) - ((prev_synapse_0_weight_update > 0) + 0))
+#             synapse_1_direction_count += np.abs(((synapse_1_weight_update > 0)+0) - ((prev_synapse_1_weight_update > 0) + 0))        
         
-        synapse_1 += alpha * synapse_1_weight_update
-        synapse_0 += alpha * synapse_0_weight_update
+#         synapse_1 += alpha * synapse_1_weight_update
+#         synapse_0 += alpha * synapse_0_weight_update
         
-        prev_synapse_0_weight_update = synapse_0_weight_update
-        prev_synapse_1_weight_update = synapse_1_weight_update
+#         prev_synapse_0_weight_update = synapse_0_weight_update
+#         prev_synapse_1_weight_update = synapse_1_weight_update
 
-    now = datetime.datetime.now()
+#     now = datetime.datetime.now()
 
-    # persist synapses
-    synapse = {'synapse0': synapse_0.tolist(), 'synapse1': synapse_1.tolist(),
-               'datetime': now.strftime("%Y-%m-%d %H:%M"),
-               'words': words,
-               'classes': classes
-              }
-    synapse_file = "synapses.json"
+#     # persist synapses
+#     synapse = {'synapse0': synapse_0.tolist(), 'synapse1': synapse_1.tolist(),
+#                'datetime': now.strftime("%Y-%m-%d %H:%M"),
+#                'words': words,
+#                'classes': classes
+#               }
+#     synapse_file = "synapses.json"
 
-    with open(synapse_file, 'w') as outfile:
-        json.dump(synapse, outfile, indent=4, sort_keys=True)
-    print ("saved synapses to:", synapse_file)
+#     with open(synapse_file, 'w') as outfile:
+#         json.dump(synapse, outfile, indent=4, sort_keys=True)
+#     print ("saved synapses to:", synapse_file)
 
 
-X = np.array(training)
-y = np.array(output)
+# X = np.array(training)
+# y = np.array(output)
 
-start_time = time.time()
+# start_time = time.time()
 
-train(X, y, hidden_neurons=20, alpha=0.1, epochs=100000, dropout=False, dropout_percent=0.2)
+# train(X, y, hidden_neurons=20, alpha=0.1, epochs=100000, dropout=False, dropout_percent=0.2)
 
-elapsed_time = time.time() - start_time
-print ("processing time:", elapsed_time, "seconds")
+# elapsed_time = time.time() - start_time
+# print ("processing time:", elapsed_time, "seconds")
 
 
 
@@ -235,22 +233,30 @@ print ("processing time:", elapsed_time, "seconds")
 # Actually USING the generated model in synapse.json to THINK! YAY!
 ###
 
-# # probability threshold
-# ERROR_THRESHOLD = 0.2
-# # load our calculated synapse values
-# synapse_file = 'synapses.json' 
-# with open(synapse_file) as data_file: 
-#     synapse = json.load(data_file) 
-#     synapse_0 = np.asarray(synapse['synapse0']) 
-#     synapse_1 = np.asarray(synapse['synapse1'])
+# probability threshold
+ERROR_THRESHOLD = 0.2
+# load our calculated synapse values
+synapse_file = 'synapses.json' 
+with open(synapse_file) as data_file: 
+    synapse = json.load(data_file) 
+    synapse_0 = np.asarray(synapse['synapse0']) 
+    synapse_1 = np.asarray(synapse['synapse1'])
 
-# def classify(sentence, show_details=False):
-#     results = think(sentence, show_details)
+def classify(sentence, show_details=False):
+    results = think(sentence, show_details)
 
-#     results = [[i,r] for i,r in enumerate(results) if r > ERROR_THRESHOLD ] 
-#     results.sort(key=lambda x: x[1], reverse=True) 
-#     return_results =[[classes[r[0]],r[1]] for r in results]
-#     print ("%s \n classification: %s" % (sentence, return_results))
-#     return return_results
+    results = [[i,r] for i,r in enumerate(results) if r > ERROR_THRESHOLD ] 
+    results.sort(key=lambda x: x[1], reverse=True) 
+    return_results =[[classes[r[0]],r[1]] for r in results]
+    print ("%s \n classification: %s" % (sentence, return_results))
+    return return_results
 
-# classify("Would you like to have lunch with me?")
+
+extracted_json = json.loads('output.json')
+for item in extracted_json:
+    print(item['Id'])
+
+# final_classes = classify("Totals: 500")
+# for myclass in final_classes:
+#     if 'amount' in myclass:
+#         print("THIS IS THE AMOUNT CLASS!")
