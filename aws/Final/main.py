@@ -4,8 +4,8 @@ import os
 
 # Document
 s3BucketName = "invoice-storage-unifyed"
-# documentName = "Screenshot20200307135515ScanbotSDKExampleFlutterpng"
-documentName = "documentimagejpg"
+# documentName = "documentimagejpg"
+documentName = "Croma (1).jpg"
 
 
 # Amazon Textract client
@@ -108,5 +108,14 @@ s3.download_file(s3BucketName, documentName, documentName)
 os.rename(documentName, documentName + '.jpg')
 documentName += ".jpg"
 
-bill = gbill.main(documentName)
+bill_and_invoice = gbill.main(documentName)
+bill = bill_and_invoice[0]
+invoice = bill_and_invoice[1]
+
+print()
+
+print("Invoice Number: {}".format("".join(invoice)))
+
+print()
+
 print("Bill Amount: {}".format("".join(bill)))
