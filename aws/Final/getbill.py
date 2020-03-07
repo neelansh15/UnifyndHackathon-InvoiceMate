@@ -10,7 +10,7 @@ def get_kv_map(file_name):
     with open(file_name, 'rb') as file:
         img_test = file.read()
         bytes_test = bytearray(img_test)
-        print('Image loaded for getting Bill Amount', file_name)
+        print('Image loaded for getting Bill Amount & Invoice Number', file_name)
 
     # process using image bytes
     client = boto3.client('textract')
@@ -90,22 +90,35 @@ def main(file_name):
     # print("\n\n== FOUND KEY : VALUE pairs ===\n")
     # print_kvs(kvs)
 
-
-    search_keys = ["amount", "total", "pay", "card", "cash", "Cash", "net amount", "net", "Pay", "Payment", "Amount", "Grand Total", "Credit"]
+    #BILL AMOUNT SEARCH
+    search_keys = ["net", "amount", "Subtotal", "subtotal", "total", "Total", "pay", "card", "cash", "Cash", "Net Amount", "Net Total", "Pay", "Payment", "Amount", "Grand Total", "Grand Total: Rs", "Credit"]
     bill_amounts = []
+
     for key in search_keys:
         search_result = search_value(kvs, key)
         if search_result is not None:
             bill_amounts.append(search_result)
     
+    #INVOICE SEARCH
+    invoice_keys = ["InvNo", "Inv No", "Bill No", "Bill No.", "Invoice Number"]
+    invoices = []
+
+    for key in invoice_keys:
+        invoice_result = search_value(kvs, key)
+        if invoice_result is not None:
+            invoices.append(invoice_result)
+    
     bill = 0
+    invoice = ""
 
     #Check the MODE of the list
     bill = stats.mode(bill_amounts)[0]
+    #Checking Mode for Invoice too just in case
+    invoice = stats.mode(invoices)[0]
 
     os.remove(file_name)
 
-    return bill
+    return [bill, invoice]
 
 
 # if __name__ == "__main__":

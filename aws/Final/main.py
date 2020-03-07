@@ -4,8 +4,9 @@ import os
 
 # Document
 s3BucketName = "invoice-storage-unifyed"
-# documentName = "Screenshot20200307135515ScanbotSDKExampleFlutterpng"
-documentName = "FunCity (1).jpg"
+# documentName = "documentimagejpg"
+documentName = "Dominos (9).jpg"
+
 
 # Amazon Textract client
 textract = boto3.client('textract')
@@ -103,5 +104,18 @@ print()
 s3 = boto3.client('s3')
 s3.download_file(s3BucketName, documentName, documentName)
 
-bill = gbill.main(documentName)
+#We shall get filnames without an extention so we need to add it manually
+os.rename(documentName, documentName + '.jpg')
+documentName += ".jpg"
+
+bill_and_invoice = gbill.main(documentName)
+bill = bill_and_invoice[0]
+invoice = bill_and_invoice[1]
+
+print()
+
+print("Invoice Number: {}".format("".join(invoice)))
+
+print()
+
 print("Bill Amount: {}".format("".join(bill)))
