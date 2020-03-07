@@ -94,5 +94,5 @@ print("\n".join(other_orgs))
 print()
 
 #TODO: Use Amazon Textract to specifically get the BILL AMOUNT, using Key:Value pair thing like I was trying earlier
-bill = gbill.main('sample.jpg')
+bill = gbill.main('sample3.jpg')
 print("Bill Amount: {}".format("".join(bill)))

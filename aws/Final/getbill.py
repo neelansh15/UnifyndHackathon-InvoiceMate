@@ -95,7 +95,7 @@ def main(file_name):
     #     search_key = input('\n Enter a search key:')
     #     print('The value is:', search_value(kvs, search_key))
 
-    search_keys = ["amount", "total", "pay", "card"]
+    search_keys = ["amount", "total", "pay", "card", "cash", "net amount", "net"]
     bill_amounts = []
     for key in search_keys:
         search_result = search_value(kvs, key)
