@@ -91,7 +91,7 @@ def main(file_name):
     # print_kvs(kvs)
 
 
-    search_keys = ["amount", "total", "pay", "card", "cash", "Cash", "net amount", "net", "Pay", "Payment", "Amount"]
+    search_keys = ["amount", "total", "pay", "card", "cash", "Cash", "net amount", "net", "Pay", "Payment", "Amount", "Grand Total", "Credit"]
     bill_amounts = []
     for key in search_keys:
         search_result = search_value(kvs, key)

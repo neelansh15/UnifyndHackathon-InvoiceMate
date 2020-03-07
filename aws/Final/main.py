@@ -5,7 +5,7 @@ import os
 # Document
 s3BucketName = "invoice-storage-unifyed"
 # documentName = "Screenshot20200307135515ScanbotSDKExampleFlutterpng"
-documentName = "Waffle (3).jpg"
+documentName = "FunCity (1).jpg"
 
 # Amazon Textract client
 textract = boto3.client('textract')
