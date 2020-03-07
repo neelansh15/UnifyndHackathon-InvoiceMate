@@ -1,7 +1,7 @@
 import boto3
 import sys
 import re
-import json
+import json, os, time
 from scipy import stats
 
 
@@ -10,7 +10,7 @@ def get_kv_map(file_name):
     with open(file_name, 'rb') as file:
         img_test = file.read()
         bytes_test = bytearray(img_test)
-        print('Image loaded', file_name)
+        print('Image loaded for getting Bill Amount', file_name)
 
     # process using image bytes
     client = boto3.client('textract')
@@ -81,7 +81,12 @@ def search_value(kvs, search_key):
         if re.search(search_key, key, re.IGNORECASE):
             return value
 
-def main(file_name):
+def main(bucket, file_name):
+
+    s3 = boto3.client('s3')
+    s3.download_file(bucket, file_name, file_name, callback = the_main(file_name))
+
+def the_main(file_name):
 
     key_map, value_map, block_map = get_kv_map(file_name)
 
@@ -90,10 +95,6 @@ def main(file_name):
     # print("\n\n== FOUND KEY : VALUE pairs ===\n")
     # print_kvs(kvs)
 
-    # Start searching a key value
-    # while input('\n Do you want to search a value for a key? (enter "n" for exit) ') != 'n':
-    #     search_key = input('\n Enter a search key:')
-    #     print('The value is:', search_value(kvs, search_key))
 
     search_keys = ["amount", "total", "pay", "card", "cash", "net amount", "net"]
     bill_amounts = []
@@ -106,6 +107,8 @@ def main(file_name):
 
     #Check the MODE of the list
     bill = stats.mode(bill_amounts)[0]
+
+    os.remove(file_name)
 
     return bill
 

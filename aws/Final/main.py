@@ -1,5 +1,6 @@
 import boto3
 import getbill as gbill
+import os
 
 # Document
 s3BucketName = "invoice-storage-unifyed"
@@ -94,5 +95,9 @@ print("\n".join(other_orgs))
 print()
 
 #TODO: Use Amazon Textract to specifically get the BILL AMOUNT, using Key:Value pair thing like I was trying earlier
-bill = gbill.main('sample3.jpg')
+# Interesting: We used the mode of the bill amounts, because in any bill, there is more than one total amount. Like, total,
+# subtotal, amount, net amount, etc.
+
+# bill = gbill.main(s3BucketName, documentName)
+bill = gbill.main(s3BucketName, documentName)
 print("Bill Amount: {}".format("".join(bill)))
