@@ -5,7 +5,11 @@ from io import BytesIO
 import sys
 
 import math
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw
+
+import json
+
+arrOfBlocks = []
 
 def ShowBoundingBox(draw,box,width,height,boxColor):
              
@@ -21,13 +25,23 @@ def ShowSelectedElement(draw,box,width,height,boxColor):
 
 # Displays information about a block returned by text detection and text analysis
 def DisplayBlockInformation(block):
+    
+    blockObj = {}
+
     print('Id: {}'.format(block['Id']))
+    blockObj['Id'] = block['Id']
+
     if 'Text' in block:
         print('    Detected: ' + block['Text'])
-    print('    Type: ' + block['BlockType'])
+        print('    Type: ' + block['BlockType'])
+
+        blockObj['Detected'] = block['Text'] # The most important
+        blockObj['Type'] = block['BlockType']
    
     if 'Confidence' in block:
         print('    Confidence: ' + "{:.2f}".format(block['Confidence']) + "%")
+
+        blockObj['Confidence'] = block['Confidence'] # The only other thing more important than the text
 
     if block['BlockType'] == 'CELL':
         print("    Cell information")
@@ -55,6 +69,8 @@ def DisplayBlockInformation(block):
     
     if 'Page' in block:
         print('Page: ' + block['Page'])
+    
+    arrOfBlocks.append(blockObj)
     print()
 
 def process_text_analysis(bucket, document):
@@ -123,9 +139,19 @@ def process_text_analysis(bucket, document):
 def main():
 
     bucket = 'invoice-storage-unifyed'
-    document = '4.jpg'
+    document = '8.jpg'
     block_count=process_text_analysis(bucket,document)
     print("Blocks detected: " + str(block_count))
+    print()
+    
+    #Remove the objects from the arrOfBlocks which don't have words for us
+    # for item in arrOfBlocks:
+    #     if item['Detected'] is None or item['Detected'] == "":
+    #         arrOfBlocks.remove(item)
+    
+    for item in arrOfBlocks:
+        print(item)
+
     
 if __name__ == "__main__":
     main()
