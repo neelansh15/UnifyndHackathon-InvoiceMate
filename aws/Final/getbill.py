@@ -100,7 +100,7 @@ def main(file_name):
             bill_amounts.append(search_result)
     
     #INVOICE SEARCH
-    invoice_keys = ["InvNo"]
+    invoice_keys = ["InvNo", "Inv No", "Bill No", "Bill No.", "Invoice Number"]
     invoices = []
 
     for key in invoice_keys:
