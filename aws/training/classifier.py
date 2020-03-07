@@ -13,7 +13,7 @@ import aws_train as awst
 #Run AWS to generate output.json for use in training here
 #TODO: Automate this to run for all files. Run for one file, generate output.json, train the model, then
 #do the same for the next file and so on
-awst.main('Croma (3).jpg')
+awst.main('Dominos (1).jpg')
 
 stemmer = LancasterStemmer()
 
@@ -252,8 +252,8 @@ def classify(sentence, show_details=False):
     return return_results
 
 
-extracted_json = json.loads('output.json')
-for item in extracted_json:
+extracted_obj = json.loads('output.json')
+for item in extracted_obj:
     print(item['Id'])
 
 # final_classes = classify("Totals: 500")
