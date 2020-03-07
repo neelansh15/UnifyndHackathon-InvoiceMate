@@ -2,7 +2,7 @@ import boto3
 
 # Document
 s3BucketName = "invoice-storage-unifyed"
-documentName = "Croma (5).jpg"
+documentName = "Croma (7).jpg"
 
 # Amazon Textract client
 textract = boto3.client('textract')
