@@ -116,7 +116,7 @@ def main(file_name):
     #Checking Mode for Invoice too just in case
     invoice = stats.mode(invoices)[0]
 
-    os.remove(file_name)
+    # os.remove(file_name)
 
     return [bill, invoice]
 
