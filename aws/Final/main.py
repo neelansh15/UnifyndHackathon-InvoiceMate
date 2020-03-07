@@ -41,6 +41,8 @@ date = []
 people = []
 commercial_items = []
 
+#Special
+invoice_number = []
 
 entities =  comprehend.detect_entities(LanguageCode="en", Text=text)
 print("\nEntities\n========")
@@ -53,11 +55,11 @@ for entity in entities["Entities"]:
             org_highest = entity["Score"]
             organization = entity["Text"]
         
-        if entity["Score"] > 0.5:
+        if entity["Score"] > 0.5 and entity["Score"] < 0.8:
             other_orgs.append(entity["Text"])
     
     elif entity["Type"] == "LOCATION":
-        if entity["Score"] > 30:
+        if entity["Score"] > 0.3:
             locations.append(entity["Text"])
     elif entity["Type"] == "TITLE":
         titles.append(entity["Text"])
@@ -72,8 +74,19 @@ for entity in entities["Entities"]:
     elif entity["Type"] == "COMMERCIAL_ITEM":
         commercial_items.append(entity["Text"])
     
+    print(entity)
+    
 
 print()
 print(organization)
-print("Location: \n".join(locations))
 
+print("\nLocation: \n{}".format("\n".join(locations)))
+
+print()
+
+print("Date: {}".format(",".join(date)))
+
+print()
+
+print("Items: \n{}".format("\n".join(commercial_items)))
+print("\n".join(other_orgs))
