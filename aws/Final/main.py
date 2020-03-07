@@ -4,7 +4,8 @@ import os
 
 # Document
 s3BucketName = "invoice-storage-unifyed"
-documentName = "Screenshot20200307135515ScanbotSDKExampleFlutterpng"
+# documentName = "Screenshot20200307135515ScanbotSDKExampleFlutterpng"
+documentName = "Waffle (3).jpg"
 
 # Amazon Textract client
 textract = boto3.client('textract')
@@ -98,6 +99,9 @@ print()
 # Interesting: We used the mode of the bill amounts, because in any bill, there is more than one total amount. Like, total,
 # subtotal, amount, net amount, etc.
 
-# bill = gbill.main(s3BucketName, documentName)
-bill = gbill.main(s3BucketName, documentName)
+#Download the file for the getbill module
+s3 = boto3.client('s3')
+s3.download_file(s3BucketName, documentName, documentName)
+
+bill = gbill.main(documentName)
 print("Bill Amount: {}".format("".join(bill)))

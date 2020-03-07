@@ -81,12 +81,7 @@ def search_value(kvs, search_key):
         if re.search(search_key, key, re.IGNORECASE):
             return value
 
-def main(bucket, file_name):
-
-    s3 = boto3.client('s3')
-    s3.download_file(bucket, file_name, file_name, callback = the_main(file_name))
-
-def the_main(file_name):
+def main(file_name):
 
     key_map, value_map, block_map = get_kv_map(file_name)
 
@@ -96,7 +91,7 @@ def the_main(file_name):
     # print_kvs(kvs)
 
 
-    search_keys = ["amount", "total", "pay", "card", "cash", "net amount", "net"]
+    search_keys = ["amount", "total", "pay", "card", "cash", "Cash", "net amount", "net", "Pay", "Payment", "Amount"]
     bill_amounts = []
     for key in search_keys:
         search_result = search_value(kvs, key)
