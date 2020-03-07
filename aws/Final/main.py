@@ -95,4 +95,4 @@ print()
 
 #TODO: Use Amazon Textract to specifically get the BILL AMOUNT, using Key:Value pair thing like I was trying earlier
 bill = gbill.main('sample.jpg')
-print("Bill Amount: {}".format(bill))
+print("Bill Amount: {}".format("".join(bill)))
