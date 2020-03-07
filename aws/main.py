@@ -138,6 +138,8 @@ def process_text_analysis(bucket, document):
 
 def main():
 
+    finalBlocksArr = []
+
     bucket = 'invoice-storage-unifyed'
     document = '8.jpg'
     block_count=process_text_analysis(bucket,document)
@@ -145,13 +147,15 @@ def main():
     print()
     
     #Remove the objects from the arrOfBlocks which don't have words for us
-    # for item in arrOfBlocks:
-    #     if item['Detected'] is None or item['Detected'] == "":
-    #         arrOfBlocks.remove(item)
-    
+    #Keep the detected text in a new list which would be saved as json later on
     for item in arrOfBlocks:
-        print(item)
+        if 'Detected' in item:
+            finalBlocksArr.append(item)
+            print(item)
 
-    
+    with open('output.json', 'w') as f:
+        f.write(json.dumps(finalBlocksArr))
+        f.close()
+
 if __name__ == "__main__":
     main()
