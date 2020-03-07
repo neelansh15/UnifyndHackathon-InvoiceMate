@@ -1,6 +1,6 @@
 import boto3
 import getbill as gbill
-import os
+import os, json
 
 # Document
 s3BucketName = "invoice-storage-unifyed"
@@ -119,3 +119,24 @@ print("Invoice Number: {}".format("".join(invoice)))
 print()
 
 print("Bill Amount: {}".format("".join(bill)))
+
+#Make an object and put all this data into it. Then output JSON to a temperory storage.
+finalobj = {
+    "organization": organization,
+    "date": date,
+    "locations": locations,
+    "bill_amount": "".join(bill),
+    "invoice": "".join(invoice),
+    "other_orgs" : other_orgs,
+    "commercial_items": commercial_items,
+    "people": people,
+    "other": other,
+    "titles": titles,
+    "quantities": quantities
+}
+
+with open('tmp/Output.json', 'w+') as f:
+    f.write(json.dumps(finalobj))
+    f.close()
+
+print("Finished writing to JSON file at tmp/Output.json")

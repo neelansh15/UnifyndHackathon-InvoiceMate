@@ -4,9 +4,6 @@ import re
 import json, os, time
 from scipy import stats
 
-import database as db
-
-
 def get_kv_map(file_name):
 
     with open(file_name, 'rb') as file:
