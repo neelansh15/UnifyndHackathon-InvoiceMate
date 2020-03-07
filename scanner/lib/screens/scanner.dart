@@ -26,8 +26,7 @@ import '../ui/utils.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_amazon_s3/flutter_amazon_s3.dart';
-import 'package:amazon_s3_cognito/amazon_s3_cognito.dart';
-import 'package:amazon_s3_cognito/aws_region.dart';
+
 
 final Color backgroundColor = Color(0xFF1E1E2B);
 const SCANBOT_SDK_LICENSE_KEY = "AHdQOyBlJKagsSm/YT9Lta9lqy3RTj" +
@@ -472,14 +471,6 @@ class _MenuDashboardPageState extends State<MenuDashboardPage>
           'invoice-storage-unifyed',
           'us-east-2:62f728ad-9d8a-4328-af78-ae9f4b159dd6',
           'us-east-2');
-      // String uploadedImageUrl = await AmazonS3Cognito.upload(
-      //   image.path,
-      //   'invoice-storage-unifyed',
-      //   'us-east-2:62f728ad-9d8a-4328-af78-ae9f4b159dd6',
-      //   'test.jpg',
-      //   'us-east-2',
-      //   'us-east-2',
-      // );
     } catch (e) {
       print(e);
     }
