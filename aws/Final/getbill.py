@@ -93,6 +93,12 @@ def main(file_name):
 
     search_keys = ["amount", "total", "pay", "card", "cash", "Cash", "net amount", "net", "Pay", "Payment", "Amount", "Grand Total", "Credit"]
     bill_amounts = []
+
+    blacklist = ["cashier", "Cashier"]
+    for b in blacklist:
+        if b in search_keys:
+            search_keys.remove(b)
+    
     for key in search_keys:
         search_result = search_value(kvs, key)
         if search_result is not None:
