@@ -5,7 +5,7 @@ import os
 # Document
 s3BucketName = "invoice-storage-unifyed"
 # documentName = "documentimagejpg"
-documentName = "Dominos (9).jpg"
+documentName = "Donuts (1).jpg"
 
 
 # Amazon Textract client
