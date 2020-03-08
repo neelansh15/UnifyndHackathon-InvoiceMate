@@ -135,8 +135,15 @@ finalobj = {
     "quantities": quantities
 }
 
-with open('tmp/Output.json', 'w+') as f:
+with open('output.json', 'w+') as f:
     f.write(json.dumps(finalobj))
     f.close()
 
-print("Finished writing to JSON file at tmp/Output.json")
+print("output.json created locally.")
+
+#Upload the Output.JSON file directly to the S3 Bucket
+s3 = boto3.client('s3')
+with open('output.json', 'rb') as f:
+    s3.upload_fileobj(f, s3BucketName, 'output.json')
+
+print("Finished uploading output.json to the bucket")
